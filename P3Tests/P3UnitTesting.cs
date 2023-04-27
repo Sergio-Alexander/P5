@@ -123,8 +123,6 @@ namespace P3UnitTesting
             Assert.AreEqual(Infantry.Direction.West, infantry.GetCurrentDirection());
         }
 
-
-
     }
 }
 
