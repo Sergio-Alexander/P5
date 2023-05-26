@@ -48,7 +48,7 @@ namespace FighterClass
         }
 
 
-        /*
+        /* many things need to be added.
 
         public override void Move(int x, int y)
 
