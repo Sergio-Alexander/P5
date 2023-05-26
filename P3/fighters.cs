@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 
 
@@ -25,9 +26,16 @@ namespace FighterClass
 
     public class Combat_HQ : ICombat_Unit
     {
+        private int[] main_artillery;
+
+        public Combat_HQ(int[] artillery)
+        {
+            main_artillery = artillery;
+        }
+
         public int[] Combat_Unit()
         {
-            return Enumerable.Range(1, 50).ToArray();
+            return main_artillery;
         }
     }
     public abstract class Fighter
@@ -73,9 +81,13 @@ namespace FighterClass
         
          */
 
+        // Constructor with error checking
         public Fighter(ICombat_Unit fighter_artillery, int fighter_armament_strength, int fighter_attack_range, int fighter_row, int fighter_col)
         {
-            unit_combat = fighter_artillery;
+            if (fighter_armament_strength < 0 || fighter_attack_range < 0 || fighter_row < 0 || fighter_col < 0)
+                throw new ArgumentException("Invalid argument provided to constructor.");
+
+            unit_combat = fighter_artillery ?? throw new ArgumentNullException(nameof(fighter_artillery));
             unit = unit_combat.Combat_Unit();
 
             armament_strength = fighter_armament_strength;
@@ -86,18 +98,28 @@ namespace FighterClass
             is_dead = false;
         }
 
-
         /*
         Method Move(int x, int y)
         Pre-conditions:
         x is a non-negative integer
         y is a non-negative integer
 
-        Post-conditions:
+        Post-conditions: 
         row is set to the value of x
         column is set to the value of y
          */
-        public abstract void Move(int x, int y);
+        // Move method with default implementation
+        public virtual void Move(int x, int y)
+        {
+            // By default do nothing, can be overridden in derived classes
+
+            if (x < 0 || y < 0)
+            {
+                throw new ArgumentException("Values must not be negative!");
+            }
+            row = x;
+            column = y;
+        }
 
 
 
@@ -112,9 +134,6 @@ namespace FighterClass
          
         */
         public virtual void Shift(int p){}
-
-
-
 
         /*
         Method Target(int x, int y, int q)
@@ -134,7 +153,6 @@ namespace FighterClass
         The function returns false
          
         */
-
 
         public virtual bool Target(int x, int y, int q)
         {
@@ -165,8 +183,6 @@ namespace FighterClass
             Check_Is_Dead();
             Check_Is_Active();
 
-
-
             return false;
         }
 
@@ -191,7 +207,7 @@ namespace FighterClass
                 is_active = false;
             }
         }
-        //------------------------------- For Unit Testing Purposes ------------
+        //------------------------------- For Unit Testing Purposes -------------//
         public int Get_Row()
         {
             return row;
