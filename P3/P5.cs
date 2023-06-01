@@ -38,11 +38,11 @@ namespace FighterClass
 
                 guards.Add(new turretSkipGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
                 guards.Add(new turretQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array));
-                guards.Add(new turretSkipQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
+                //guards.Add(new turretSkipQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
 
                 guards.Add(new infantrySkipGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
                 guards.Add(new infantryQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array));
-                guards.Add(new infantrySkipQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
+                //guards.Add(new infantrySkipQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
             }
         }
 
@@ -58,10 +58,8 @@ namespace FighterClass
                 guard.block(x);
 
                 // Test update_alive_status method
-                guard.update_alive_status();
+                guard.toggle_alive_status();
 
-                // Test rng_up_down method
-                guard.rng_up_down();
 
                 guardCounter++;
             }

@@ -16,7 +16,7 @@ namespace FighterClass
 			shield_array = shield_stats;
 			is_alive = true; // will start with alive
             shield_up_down = true; // will start in "up" mode
-			update_alive_status();
+            toggle_alive_status();
 		}
 
 		public virtual void block(int x)
@@ -39,10 +39,10 @@ namespace FighterClass
 				}
 			}
 
-			update_alive_status();
+            toggle_alive_status();
 		}
 
-		public void update_alive_status()
+		public void toggle_alive_status()
 		{
 			int viable_shields_in_array = shield_array.Count(durability => durability > 0);
 			if (viable_shields_in_array >= shield_array.Length / 2)
@@ -55,7 +55,7 @@ namespace FighterClass
 			}
 		}
 
-		public void rng_up_down()
+		private void rng_up_down()
 		{
 			if ((shield_array.Length + 3 * 9) % 2 == 0)
 			{

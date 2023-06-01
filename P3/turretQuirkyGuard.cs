@@ -33,15 +33,15 @@ namespace FighterClass
             Target(row + 2, column + 2, armament_strength - 2); // once blocked, it will target the object in front of it
         }
 
-        public void update_alive_status()
+        public void toggle_alive_status()
         {
-            guards.update_alive_status();
+            guards.toggle_alive_status();
         }
 
-        public void rng_up_down()
-        {
-            guards.rng_up_down();
-        }
+        //public void rng_up_down()
+        //{
+        //    guards.rng_up_down();
+        //}
 
         public bool alive_status()
         {

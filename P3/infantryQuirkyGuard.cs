@@ -38,17 +38,17 @@ namespace FighterClass
 
         }
 
-        public void update_alive_status()
+        public void toggle_alive_status()
         {
-            guards.update_alive_status();
+            guards.toggle_alive_status();
          
         }
 
-        public void rng_up_down()
-        {
-            guards.rng_up_down();
+        //public void rng_up_down()
+        //{
+        //    guards.rng_up_down();
          
-        }
+        //}
 
         public bool alive_status()
         {

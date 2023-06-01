@@ -4,8 +4,7 @@ namespace FighterClass
 	public interface IGuard
 	{
 		void block(int x);
-		void update_alive_status();
-		void rng_up_down();
+		void toggle_alive_status();
 
 		bool alive_status();
     }
