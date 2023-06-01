@@ -66,6 +66,11 @@ namespace FighterClass
 				shield_up_down = false;
 			}
 		}
+
+		public bool alive_status()
+		{
+			return is_alive;
+		}
 	}
 }
 

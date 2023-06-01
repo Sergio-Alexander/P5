@@ -6,6 +6,8 @@ namespace FighterClass
 		void block(int x);
 		void update_alive_status();
 		void rng_up_down();
+
+		bool alive_status();
     }
 }
 

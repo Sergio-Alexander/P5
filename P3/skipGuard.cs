@@ -13,7 +13,8 @@ namespace FighterClass
 
         public override void block(int x)
         {
-            int offset_x = x + unstable_k;
+            int offset_x = (x + unstable_k) % shield_array.Length;
+
 
             // Check if offset_x is within the bounds of the array
             if (offset_x < 0 || offset_x >= shield_array.Length)
