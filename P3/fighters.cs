@@ -19,25 +19,28 @@ unit_combat must always be a valid instance of an object implementing the IComba
 
 namespace FighterClass
 {
-    public interface ICombat_Unit
-    {
-        int[] Combat_Unit();
-    }
+    //public interface ICombat_Unit
+    //{
+    //    int[] Combat_Unit();
+    //}
 
-    public class Combat_HQ : ICombat_Unit
-    {
-        private int[] main_artillery;
+    //public class Combat_HQ : ICombat_Unit
+    //{
+    //    private int[] main_artillery;
 
-        public Combat_HQ(int[] artillery)
-        {
-            main_artillery = artillery;
-        }
+    //    public Combat_HQ(int[] artillery)
+    //    {
+    //        main_artillery = artillery;
+    //    }
 
-        public int[] Combat_Unit()
-        {
-            return main_artillery;
-        }
-    }
+    //    public int[] Combat_Unit()
+    //    {
+    //        return main_artillery;
+    //    }
+    //}
+
+
+
     public abstract class Fighter
     {
         protected int row;
@@ -45,10 +48,12 @@ namespace FighterClass
         protected int armament_strength;
         protected int attack_range;
 
-        protected int[] unit;
-        protected ICombat_Unit unit_combat;
+        protected int[] artillery;
 
-        protected int minimum_strength = 1;
+
+        //protected ICombat_Unit unit_combat;
+
+        protected int minimum_strength;
         protected bool is_active;
         protected bool is_dead;
 
@@ -82,13 +87,15 @@ namespace FighterClass
          */
 
         // Constructor with error checking
-        public Fighter(ICombat_Unit fighter_artillery, int fighter_armament_strength, int fighter_attack_range, int fighter_row, int fighter_col)
+        public Fighter(int[] arti, int fighter_armament_strength, int fighter_attack_range, int fighter_row, int fighter_col)
         {
             if (fighter_armament_strength < 0 || fighter_attack_range < 0 || fighter_row < 0 || fighter_col < 0)
                 throw new ArgumentException("Invalid argument provided to constructor.");
 
-            unit_combat = fighter_artillery ?? throw new ArgumentNullException(nameof(fighter_artillery));
-            unit = unit_combat.Combat_Unit();
+            //unit_combat = fighter_artillery ?? throw new ArgumentNullException(nameof(fighter_artillery));
+            //unit = unit_combat.Combat_Unit();
+
+            artillery = arti;
 
             armament_strength = fighter_armament_strength;
             attack_range = fighter_attack_range;
@@ -96,6 +103,7 @@ namespace FighterClass
             column = fighter_col;
             is_active = armament_strength >= minimum_strength;
             is_dead = false;
+            minimum_strength = artillery[artillery.Length - 1];
         }
 
         /*

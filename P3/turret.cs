@@ -20,18 +20,19 @@ namespace FighterClass
     public class Turret : Fighter
     {
         private int failed_requests;
-        private readonly int max_failed_requests = 5;
+        private readonly int max_failed_requests;
         private bool is_permanently_dead;
         private readonly int original_armament_strength;
 
-        public Turret(ICombat_Unit fighter_artillery, int armament_strength, int attack_range, int fighter_row, int fighter_col) : base(fighter_artillery, armament_strength, attack_range, fighter_row, fighter_col)
+        public Turret(int[] arti, int armament_strength, int attack_range, int fighter_row, int fighter_col) : base(arti, armament_strength, attack_range, fighter_row, fighter_col)
         {
             failed_requests = 0;
             is_permanently_dead = false;
             original_armament_strength = armament_strength;
+            max_failed_requests = (armament_strength % 2) + 3;
+
+            artillery = arti;
         }
-
-
 
 
         /*

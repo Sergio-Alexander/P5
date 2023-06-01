@@ -23,15 +23,18 @@ namespace FighterClass
         public enum Direction {North, South, East, West}
         private Direction current_direction;
         private bool first_move;
+        private int original_armament_strength;
 
-
-        public Infantry(ICombat_Unit fighter_artillery, int armament_strength, int attack_range, int fighter_row, int fighter_col) : base(fighter_artillery, armament_strength, attack_range, fighter_row, fighter_col)
+        public Infantry(int[] arti, int armament_strength, int attack_range, int fighter_row, int fighter_col) : base(arti, armament_strength, attack_range, fighter_row, fighter_col)
         {
             is_active = true;
             current_direction = Direction.North;
             first_move = true;
-        }
+            is_dead = false;
+            original_armament_strength = armament_strength;
 
+            artillery = arti;
+        }
 
         /*
         public override void Shift(int p)
@@ -90,7 +93,11 @@ namespace FighterClass
             }
             else
             {
-                Reset();
+                if (!is_active && !is_dead)
+                {
+                    Reset();
+                }
+                return;
             }
         }
 
@@ -131,6 +138,7 @@ namespace FighterClass
         private void Reset()
         {
             is_active = true;
+            armament_strength = original_armament_strength;
         }
     }
 }
