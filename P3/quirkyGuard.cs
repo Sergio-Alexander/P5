@@ -1,29 +1,33 @@
 ﻿using System;
 namespace FighterClass
 {
-	public class quirkyGuard : Guard
+	public class QuirkyGuard : Guard
 	{
-		public quirkyGuard(int[] quirky_array):base(quirky_array){}
-
-        public override void block(int x)
+        private int counter;
+		public QuirkyGuard(int[] quirkyArray):base(quirkyArray)
         {
-			int ignored_number = arbitrarily_selected_shield(x);
+            counter = 0;
+        }
+
+        public override void Block(int x)
+        {
+
+            int ignoredNumber = ArbitrarilySelectedShield(x);
+
 
             // Check if offset_x is within the bounds of the array
-            if (ignored_number < 0 || ignored_number >= shield_array.Length)
+            if (ignoredNumber < 0 || ignoredNumber >= shieldArray.Length)
             {
                 throw new ArgumentException("Invalid, OUT OF BOUNDS.");
             }
 
-            base.block(ignored_number);
+            base.Block(ignoredNumber);
         }
 
-		private static int arbitrarily_selected_shield(int x)
+		private int ArbitrarilySelectedShield(int x)
 		{
-			int rng = (x * 2) % 3;
-
-			return rng;
-		}
+            return (counter++ + x) % shieldArray.Length;
+        }
     }
 }
 

@@ -3,10 +3,10 @@ namespace FighterClass
 {
 	public interface IGuard
 	{
-		void block(int x);
-		void toggle_alive_status();
+		void Block(int x);
+		//void ToggleAliveStatus();
 
-		bool alive_status();
+		bool AliveStatus();
     }
 }
 

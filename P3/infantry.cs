@@ -21,17 +21,17 @@ namespace FighterClass
     public class Infantry : Fighter
     {
         public enum Direction {North, South, East, West}
-        private Direction current_direction;
-        private bool first_move;
-        private int original_armament_strength;
+        private Direction currentDirection;
+        private bool firstMove;
+        private readonly int originalArmamentStrength;
 
-        public Infantry(int[] arti, int armament_strength, int attack_range, int fighter_row, int fighter_col) : base(arti, armament_strength, attack_range, fighter_row, fighter_col)
+        public Infantry(int[] arti, int armamentStrength, int attackRange, int fighterRow, int fighterCol) : base(arti, armamentStrength, attackRange, fighterRow, fighterCol)
         {
-            is_active = true;
-            current_direction = Direction.North;
-            first_move = true;
-            is_dead = false;
-            original_armament_strength = armament_strength;
+            isActive = true;
+            currentDirection = Direction.North;
+            firstMove = true;
+            isDead = false;
+            originalArmamentStrength = armamentStrength;
 
             artillery = arti;
         }
@@ -43,11 +43,11 @@ namespace FighterClass
         None
 
         Post-conditions:
-        Changes the attack_range property of the Infantry instance to the value of p.
+        Changes the attackRange property of the Infantry instance to the value of p.
         */
         public override void Shift(int p)
         {
-            attack_range = p;
+            attackRange = p;
         }
 
 
@@ -61,27 +61,27 @@ namespace FighterClass
         Post-conditions:
         If the Infantry instance is active, updates its row and column properties to the values of x and y respectively.
         If the Infantry instance is not active, does nothing.
-        If the Infantry instance has not moved before, sets the first_move property to false.
-        If the Infantry instance has moved before, sets the current_direction property to the direction it moved in based on its current position and the new position (North if it moved up, South if it moved down, East if it moved right, West if it moved left).
+        If the Infantry instance has not moved before, sets the firstMove property to false.
+        If the Infantry instance has moved before, sets the currentDirection property to the direction it moved in based on its current position and the new position (North if it moved up, South if it moved down, East if it moved right, West if it moved left).
 
          */
 
         public override void Move(int x, int y)
         {
-            if (is_active)
+            if (isActive)
             {
-                Direction newDirection = get_direction(x, y);
+                Direction newDirection = GetDirection(x, y);
 
-                if (first_move)
+                if (firstMove)
                 {
-                    first_move = false;
+                    firstMove = false;
                 }
                 else
                 {
-                    if (current_direction == Direction.North && newDirection == Direction.South ||
-                        current_direction == Direction.South && newDirection == Direction.North ||
-                        current_direction == Direction.East && newDirection == Direction.West ||
-                        current_direction == Direction.West && newDirection == Direction.East)
+                    if (currentDirection == Direction.North && newDirection == Direction.South ||
+                        currentDirection == Direction.South && newDirection == Direction.North ||
+                        currentDirection == Direction.East && newDirection == Direction.West ||
+                        currentDirection == Direction.West && newDirection == Direction.East)
                     {
                         return;
                     }
@@ -89,11 +89,11 @@ namespace FighterClass
 
                 row = x;
                 column = y;
-                current_direction = newDirection;
+                currentDirection = newDirection;
             }
             else
             {
-                if (!is_active && !is_dead)
+                if (!isActive && !isDead)
                 {
                     Reset();
                 }
@@ -105,7 +105,7 @@ namespace FighterClass
 
         /*
 
-        private Direction get_direction(int x, int y)
+        private Direction GetDirection(int x, int y)
 
         Pre-conditions:
         None
@@ -115,7 +115,7 @@ namespace FighterClass
 
          */
 
-        private Direction get_direction(int x, int y)
+        private Direction GetDirection(int x, int y)
         {
             if (x > row) return Direction.South;
             if (x < row) return Direction.North;
@@ -132,13 +132,13 @@ namespace FighterClass
         None
 
         Post-conditions:
-        If the Infantry instance is not active, sets its is_active property to true. Does nothing otherwise.
+        If the Infantry instance is not active, sets its isActive property to true. Does nothing otherwise.
          */
 
         private void Reset()
         {
-            is_active = true;
-            armament_strength = original_armament_strength;
+            isActive = true;
+            armamentStrength = originalArmamentStrength;
         }
     }
 }
@@ -147,9 +147,9 @@ namespace FighterClass
 /*
 ---------------------- Implementation Invariants ----------------
 
-is_dead can only be true when armament_strength < minimum_strength - 1
+isDead can only be true when armamentStrength < minimum_strength - 1
 
-is_active will be false when armament_strength <= minimum_strength
+isActive will be false when armamentStrength <= minimum_strength
 
 
 Can only be Reset when infantryman is inactive. I designed it so that my infantrymen will never die.

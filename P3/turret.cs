@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 /*
  -------------------- Class Invariants -----------------
 
-The Turret instance's failed_requests property must be non-negative.
-The Turret instance's failed_requests property must be less than or equal to max_failed_requests.
-If the Turret instance's is_dead property is true, its is_active property must be false.
-If the Turret instance's is_permanently_dead property is true, its is_dead property must be true and its is_active property must be false.
+The Turret instance's failedRequests property must be non-negative.
+The Turret instance's failedRequests property must be less than or equal to maxFailedRequests.
+If the Turret instance's isDead property is true, its isActive property must be false.
+If the Turret instance's isPermanentlyDead property is true, its isDead property must be true and its isActive property must be false.
  */
 
 
@@ -19,17 +19,17 @@ namespace FighterClass
 {
     public class Turret : Fighter
     {
-        private int failed_requests;
-        private readonly int max_failed_requests;
-        private bool is_permanently_dead;
-        private readonly int original_armament_strength;
+        private int failedRequests;
+        private readonly int maxFailedRequests;
+        private bool isPermanentlyDead;
+        private readonly int originalArmamentStrength;
 
-        public Turret(int[] arti, int armament_strength, int attack_range, int fighter_row, int fighter_col) : base(arti, armament_strength, attack_range, fighter_row, fighter_col)
+        public Turret(int[] arti, int armamentStrength, int attackRange, int fighterRow, int fighterCol) : base(arti, armamentStrength, attackRange, fighterRow, fighterCol)
         {
-            failed_requests = 0;
-            is_permanently_dead = false;
-            original_armament_strength = armament_strength;
-            max_failed_requests = (armament_strength % 2) + 3;
+            failedRequests = 0;
+            isPermanentlyDead = false;
+            originalArmamentStrength = armamentStrength;
+            maxFailedRequests = (armamentStrength % 2) + 3;
 
             artillery = arti;
         }
@@ -42,20 +42,20 @@ namespace FighterClass
         None
 
         Post-conditions:
-        If the Turret instance is active, sets its is_active property to false and increments its failed_requests property by 1.
+        If the Turret instance is active, sets its isActive property to false and increments its failedRequests property by 1.
         If the Turret instance is not active, does nothing.
-        If the Turret instance has failed requests equal to or greater than max_failed_requests - 1, sets its is_dead property to true.
-        If the Turret instance has failed requests equal to or greater than max_failed_requests, sets its is_permanently_dead property to true.
+        If the Turret instance has failed requests equal to or greater than maxFailedRequests - 1, sets its isDead property to true.
+        If the Turret instance has failed requests equal to or greater than maxFailedRequests, sets its isPermanentlyDead property to true.
 
          */
         public override void Move(int x, int y)
         {
-            is_active = false;
-            failed_requests++;
+            isActive = false;
+            failedRequests++;
 
-            Dead_Checker();
+            DeadChecker();
 
-            Perma_Dead_Checker();
+            PermaDeadChecker();
         }
 
 
@@ -66,33 +66,33 @@ namespace FighterClass
         None
 
         Post-conditions:
-        If p is less than 0 or greater than the Turret instance's attack_range property, increments the instance's failed_requests property by 1.
-        If the Turret instance has failed requests equal to or greater than max_failed_requests - 1, sets its is_dead property to true.
-        If the Turret instance has failed requests equal to or greater than max_failed_requests, sets its is_permanently_dead property to true.
-        If the Turret instance is not active and is_dead is true and is_permanently_dead is false, sets its is_active property to true and its is_dead property to false.
-        If p is greater than or equal to 0, sets the Turret instance's attack_range property to the value of p.
+        If p is less than 0 or greater than the Turret instance's attackRange property, increments the instance's failedRequests property by 1.
+        If the Turret instance has failed requests equal to or greater than maxFailedRequests - 1, sets its isDead property to true.
+        If the Turret instance has failed requests equal to or greater than maxFailedRequests, sets its isPermanentlyDead property to true.
+        If the Turret instance is not active and isDead is true and isPermanentlyDead is false, sets its isActive property to true and its isDead property to false.
+        If p is greater than or equal to 0, sets the Turret instance's attackRange property to the value of p.
 
          */
 
         public override void Shift(int p)
         {
 
-            if (p < 0 || p > attack_range)
+            if (p < 0 || p > attackRange)
             {
-                failed_requests++;
+                failedRequests++;
             }
 
-            Dead_Checker();
+            DeadChecker();
 
-            Perma_Dead_Checker();
+            PermaDeadChecker();
 
-            if ((!is_active && is_dead) && !is_permanently_dead)
+            if ((!isActive && isDead) && !isPermanentlyDead)
             {
                 Revive();
             }
             else if (p >= 0)
             {
-                attack_range = p;
+                attackRange = p;
             }
         }
 
@@ -104,7 +104,7 @@ namespace FighterClass
         None
 
         Post-conditions:
-        If the target is not at distance p (attack_range) from the Turret instance, returns false.
+        If the target is not at distance p (attackRange) from the Turret instance, returns false.
         Otherwise, performs the base class's Target method on the target's row, column, and strength values, and returns its result.
 
          */
@@ -113,8 +113,8 @@ namespace FighterClass
         {
             int distance = Math.Abs(row - x);
 
-            // Check if the target is at distance p (attack_range)
-            if (distance != attack_range)
+            // Check if the target is at distance p (attackRange)
+            if (distance != attackRange)
             {
                 return false;
             }
@@ -130,57 +130,57 @@ namespace FighterClass
         None
 
         Post-conditions:
-        If the Turret instance is not active and is_dead is true and is_permanently_dead is false, sets its is_active property to true, its is_dead property to false, its failed_requests property to 0, and its armament_strength property to its original value.
+        If the Turret instance is not active and isDead is true and isPermanentlyDead is false, sets its isActive property to true, its isDead property to false, its failedRequests property to 0, and its armamentStrength property to its original value.
 
          */
 
         private void Revive()
         {
-            is_active = true;
-            is_dead = false;
-            failed_requests = 0;
-            armament_strength = original_armament_strength;
+            isActive = true;
+            isDead = false;
+            failedRequests = 0;
+            armamentStrength = originalArmamentStrength;
         }
 
 
 
         /*
-         private void Dead_Checker()
+         private void DeadChecker()
 
         Pre-conditions:
         None
 
         Post-conditions:
-        If the Turret instance has failed requests equal to or greater than max_failed_requests - 1, sets its is_active property to false and its is_dead property to true.
+        If the Turret instance has failed requests equal to or greater than maxFailedRequests - 1, sets its isActive property to false and its isDead property to true.
 
          */
 
-        private void Dead_Checker()
+        private void DeadChecker()
         {
-            if (failed_requests >= max_failed_requests - 1)
+            if (failedRequests >= maxFailedRequests - 1)
             {
-                is_active = false;
-                is_dead = true;
+                isActive = false;
+                isDead = true;
             }
         }
 
 
         /*
-         private void Perma_Dead_Checker()
+         private void PermaDeadChecker()
 
         Pre-conditions:
         None
 
         Post-conditions:
-        If the Turret instance has failed requests equal to or greater than max_failed_requests, sets its is_permanently_dead property to true.
+        If the Turret instance has failed requests equal to or greater than maxFailedRequests, sets its isPermanentlyDead property to true.
 
          */
 
-        private void Perma_Dead_Checker()
+        private void PermaDeadChecker()
         {
-            if (failed_requests >= max_failed_requests)
+            if (failedRequests >= maxFailedRequests)
             {
-                is_permanently_dead = true;
+                isPermanentlyDead = true;
             }
         }
     }
@@ -190,9 +190,9 @@ namespace FighterClass
 /*
 ---------------------- Implementation Invariants ----------------
 
-The Turret instance's attack_range property must be non-negative.
-The Turret instance's armament_strength property must be non-negative.
+The Turret instance's attackRange property must be non-negative.
+The Turret instance's armamentStrength property must be non-negative.
 The Turret instance's row and column properties must be non-negative.
-The Turret instance's original_armament_strength property must be equal to its armament_strength property at the time of its instantiation.
+The Turret instance's originalArmamentStrength property must be equal to its armamentStrength property at the time of its instantiation.
 
  */

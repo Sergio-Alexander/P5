@@ -1,59 +1,46 @@
 ﻿using System;
 namespace FighterClass
 {
-	public class infantryQuirkyGuard:Infantry, IGuard
+	public class InfantryQuirkyGuard:Infantry, IGuard
 	{
- 
+        protected QuirkyGuard guards;
 
-        protected quirkyGuard guards;
+        protected int omegaShield;
+        protected int omegaShieldThreshold;
 
-        protected int omega_shield;
-        protected int omega_shield_threshold;
-
-        public infantryQuirkyGuard(int[] arti, int armament_strength, int attack_range, int fighter_row, int fighter_col, int[] quirky_array) :base(arti, armament_strength, attack_range, fighter_row, fighter_col)
+        public InfantryQuirkyGuard(int[] arti, int armamentStrength, int attackRange, int fighterRow, int fighterCol, int[] quirkyArray) :base(arti, armamentStrength, attackRange, fighterRow, fighterCol)
 		{
-            if (quirky_array == null || quirky_array.Length == 0)
+            if (quirkyArray == null || quirkyArray.Length == 0)
             {
                 throw new ArgumentException("Shield array cannot be null or empty.");
             }
 
-            guards = new quirkyGuard(quirky_array);
+            guards = new QuirkyGuard(quirkyArray);
 
-            omega_shield = 0;
-            omega_shield_threshold = armament_strength / 2;
+            omegaShield = 0;
+            omegaShieldThreshold = armamentStrength / 2;
         }
 
-        public virtual void block(int x)
+        public virtual void Block(int x)
         {
-            omega_shield++;
+            omegaShield++;
 
-            if (omega_shield >= armament_strength) // Once this guard has enough omega_shield, it will block incoming attack instead of damaging the durability of the shield
+            if (omegaShield >= armamentStrength) // Once this guard has enough omegaShield, it will block incoming attack instead of damaging the durability of the shield
             {
-                omega_shield = 0;
+                omegaShield = 0;
                 return;
             }
-            guards.block(x);
+            guards.Block(x);
             Move(row + 1, column + 1);
-            Target(row + 2, column + 2, armament_strength - 2); // once blocked, it will target the object 
-
+            Target(row + 2, column + 2, armamentStrength - 2); // once blocked, it will target the object 
         }
 
-        public void toggle_alive_status()
+        public bool AliveStatus()
         {
-            guards.toggle_alive_status();
-         
+            return guards.AliveStatus();
         }
 
-        //public void rng_up_down()
-        //{
-        //    guards.rng_up_down();
-         
-        //}
-
-        public bool alive_status()
-        {
-            return guards.alive_status();
-        }
+    
     }
 }
 

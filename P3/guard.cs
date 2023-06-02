@@ -7,70 +7,83 @@ namespace FighterClass
 {
 	public abstract class Guard : IGuard
 	{
-        protected int[] shield_array;
-		protected bool is_alive;
-		protected bool shield_up_down; // up if true || down if false
+        protected int[] shieldArray;
+		protected bool isAlive;
+		protected bool shieldUpDown; // up if true || down if false
+		protected int health;
 
-        public Guard(int[] shield_stats)
+        public Guard(int[] shieldStats)
 		{
-			shield_array = shield_stats;
-			is_alive = true; // will start with alive
-            shield_up_down = true; // will start in "up" mode
-            toggle_alive_status();
+            if (shieldStats.Any(x => x < 0))
+            {
+                throw new ArgumentException("Shield stats cannot contain negative numbers.");
+            }
+            shieldArray = shieldStats;
+			isAlive = true; // will start with alive
+            shieldUpDown = true; // will start in "up" mode
+			health = shieldStats.Length;
+            ToggleAliveStatus();
 		}
 
-		public virtual void block(int x)
+		public virtual void Block(int x)
 		{
-			if (x < 0 || x > shield_array.Length)
+			if (x < 0 || x > shieldArray.Length)
 			{
-                throw new ArgumentException("Cannot block a negative number. X IS INVALID");
+                throw new ArgumentException("Cannot Block a negative number. X IS INVALID");
             }
 
-			rng_up_down();
+			RngUpDown();
 
-			if (is_alive)
+			if (isAlive)
 			{
-                if (shield_up_down && (shield_array[x] >= 0))
+                if (shieldUpDown && (shieldArray[x] >= 0)) // If shield is up, and the durability of the shield is greater than 0, it will block. Health will not decrease
                 {
-					shield_array[x]--;
-                } else if (!shield_up_down)
+					shieldArray[x]--;
+                }
+				else if (shieldUpDown && (shieldArray[x] <= 0)) // If shield is up, but durability = 0, health will decrease
 				{
-					shield_array[x] = 0; // loses shield
+					health--;
+				}
+				else if (!shieldUpDown) // Shield will be lost, and health will decrease
+				{
+					shieldArray[x] = 0; // loses shield
+					health--;
 				}
 			}
-
-            toggle_alive_status();
+            ToggleAliveStatus();
 		}
 
-		public void toggle_alive_status()
+		private void ToggleAliveStatus()
 		{
-			int viable_shields_in_array = shield_array.Count(durability => durability > 0);
-			if (viable_shields_in_array >= shield_array.Length / 2)
+			int viableShieldsInArray = shieldArray.Count(durability => durability > 0);
+			if ((viableShieldsInArray >= shieldArray.Length / 2) && (health > 0))
 			{
-				is_alive = true;
+				isAlive = true;
 			}
 			else
 			{
-				is_alive = false;
+				isAlive = false;
 			}
 		}
 
-		private void rng_up_down()
+		private void RngUpDown()
 		{
-			if ((shield_array.Length + 3 * 9) % 2 == 0)
+			if ((shieldArray.Length + 3 * 9) % 2 == 0)
 			{
-				shield_up_down = true;
+				shieldUpDown = true;
 			}
 			else
 			{
-				shield_up_down = false;
+				shieldUpDown = false;
 			}
 		}
 
-		public bool alive_status()
+		public bool AliveStatus()
 		{
-			return is_alive;
+			return isAlive;
 		}
+
+		
 	}
 }
 

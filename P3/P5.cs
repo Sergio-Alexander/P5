@@ -14,7 +14,7 @@ namespace FighterClass
             AddGuards(guards);
 
             // Loop through the list and call methods on each object
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Console.WriteLine($"Round {i + 1}:");
                 TestGuards(guards);
@@ -29,20 +29,18 @@ namespace FighterClass
             for (int i = 0; i < 5; i++)
             {
                 int[] arti = { rand.Next(1, 10), rand.Next(1, 10), rand.Next(1, 10) };
-                int armament_strength = rand.Next(1, 10);
-                int attack_range = rand.Next(1, 10);
-                int fighter_row = rand.Next(1, 10);
-                int fighter_col = rand.Next(1, 10);
-                int[] quirky_array = { rand.Next(1, 10), rand.Next(1, 10), rand.Next(1, 10) };
+                int armamentStrength = rand.Next(1, 10);
+                int attackRange = rand.Next(1, 10);
+                int fighterRow = rand.Next(1, 10);
+                int fighterCol = rand.Next(1, 10);
+                int[] guard_array = { rand.Next(1, 10), rand.Next(1, 10), rand.Next(1, 10) };
                 int k = rand.Next(1, 10);
 
-                guards.Add(new turretSkipGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
-                guards.Add(new turretQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array));
-                //guards.Add(new turretSkipQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
+                guards.Add(new TurretSkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k));
+                guards.Add(new TurretQuirkyGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array));
 
-                guards.Add(new infantrySkipGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
-                guards.Add(new infantryQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array));
-                //guards.Add(new infantrySkipQuirkyGuard(arti, armament_strength, attack_range, fighter_row, fighter_col, quirky_array, k));
+                guards.Add(new InfantrySkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k));
+                guards.Add(new InfantryQuirkyGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array));
             }
         }
 
@@ -55,17 +53,13 @@ namespace FighterClass
             {
                 int x = rand.Next(1, 10);
                 Console.WriteLine($"Guard{guardCounter} is blocking attack of strength {x}.");
-                guard.block(x);
-
-                // Test update_alive_status method
-                guard.toggle_alive_status();
-
+                guard.Block(x);
 
                 guardCounter++;
             }
 
             // Remove dead guards
-            guards.RemoveAll(guard => !guard.alive_status());
+            guards.RemoveAll(guard => !guard.AliveStatus());
         }
     }
 }

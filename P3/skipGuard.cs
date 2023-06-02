@@ -1,28 +1,29 @@
 ﻿using System;
 namespace FighterClass
 {
-	public class skipGuard : Guard
+	public class SkipGuard : Guard
 	{
-        private int unstable_k;
+        private readonly int unstableK;
 
-        public skipGuard(int[] skip_array, int k) : base(skip_array)
+        public SkipGuard(int[] skipArray, int k) : base(skipArray)
         {
-            unstable_k = k;
-        }
-
-
-        public override void block(int x)
-        {
-            int offset_x = (x + unstable_k) % shield_array.Length;
-
-
-            // Check if offset_x is within the bounds of the array
-            if (offset_x < 0 || offset_x >= shield_array.Length)
+            if (k < 0)
             {
-                throw new ArgumentException("Invalid shield index after offset.");
+                throw new ArgumentException("K is a negative number (INVALID)");
             }
+            unstableK = k;
+        }
+        public override void Block(int x)
+        {
+            int offsetX = (x + unstableK) % shieldArray.Length; // This is done so that it would always be within the range of the array (no out of bounds)
 
-            base.block(offset_x);
+            if (offsetX < 0 || offsetX > shieldArray.Length)
+            {
+                throw new ArgumentException("Cannot Block a negative number. X IS INVALID");
+            }
+          
+
+            base.Block(offsetX);
         }
     }
 }

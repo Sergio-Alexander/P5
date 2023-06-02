@@ -45,51 +45,51 @@ namespace FighterClass
     {
         protected int row;
         protected int column;
-        protected int armament_strength;
-        protected int attack_range;
+        protected int armamentStrength;
+        protected int attackRange;
 
         protected int[] artillery;
 
 
         //protected ICombat_Unit unit_combat;
 
-        protected int minimum_strength;
-        protected bool is_active;
-        protected bool is_dead;
+        protected int minimumStrength;
+        protected bool isActive;
+        protected bool isDead;
 
 
-        private int total_targets_vanquished;
+        private int totalTargetsVanquished;
 
 
         /*
 
         Pre-conditions:
 
-        Constructor Fighter(ICombat_Unit fighter_artillery, int fighter_armament_strength, int fighter_attack_range, int fighter_row, int fighter_col)
+        Constructor Fighter(ICombat_Unit fighter_artillery, int fighterArmamentStrength, int fighterAttackRange, int fighterRow, int fighterCol)
 
         fighter_artillery is not null
-        fighter_armament_strength is a non-negative integer
-        fighter_attack_range is a non-negative integer
-        fighter_row is a non-negative integer
-        fighter_col is a non-negative integer
+        fighterArmamentStrength is a non-negative integer
+        fighterAttackRange is a non-negative integer
+        fighterRow is a non-negative integer
+        fighterCol is a non-negative integer
 
 
         Post-conditions:
         unit_combat is set to the value of fighter_artillery
         unit is set to the result of fighter_artillery.Combat_Unit()
-        armament_strength is set to the value of fighter_armament_strength
-        attack_range is set to the value of fighter_attack_range
-        row is set to the value of fighter_row
-        column is set to the value of fighter_col
-        is_active is set to true if armament_strength >= minimum_strength, otherwise it is set to false
-        is_dead is set to false
+        armamentStrength is set to the value of fighterArmamentStrength
+        attackRange is set to the value of fighterAttackRange
+        row is set to the value of fighterRow
+        column is set to the value of fighterCol
+        isActive is set to true if armamentStrength >= minimumStrength, otherwise it is set to false
+        isDead is set to false
         
          */
 
         // Constructor with error checking
-        public Fighter(int[] arti, int fighter_armament_strength, int fighter_attack_range, int fighter_row, int fighter_col)
+        public Fighter(int[] arti, int fighterArmamentStrength, int fighterAttackRange, int fighterRow, int fighterCol)
         {
-            if (fighter_armament_strength < 0 || fighter_attack_range < 0 || fighter_row < 0 || fighter_col < 0)
+            if (fighterArmamentStrength < 0 || fighterAttackRange < 0 || fighterRow < 0 || fighterCol < 0)
                 throw new ArgumentException("Invalid argument provided to constructor.");
 
             //unit_combat = fighter_artillery ?? throw new ArgumentNullException(nameof(fighter_artillery));
@@ -97,13 +97,13 @@ namespace FighterClass
 
             artillery = arti;
 
-            armament_strength = fighter_armament_strength;
-            attack_range = fighter_attack_range;
-            row = fighter_row;
-            column = fighter_col;
-            is_active = armament_strength >= minimum_strength;
-            is_dead = false;
-            minimum_strength = artillery[artillery.Length - 1];
+            armamentStrength = fighterArmamentStrength;
+            attackRange = fighterAttackRange;
+            row = fighterRow;
+            column = fighterCol;
+            isActive = armamentStrength >= minimumStrength;
+            isDead = false;
+            minimumStrength = artillery[artillery.Length - 1];
         }
 
         /*
@@ -152,19 +152,19 @@ namespace FighterClass
         q is a non-negative integer
         Post-conditions:
 
-        If is_active is false or is_dead is true, the function returns false
-        If the distance between the fighter and the target is greater than attack_range, the function returns false
-        If armament_strength is greater than q, total_targets_vanquished is incremented by 1, and the function returns true
-        If armament_strength is less than or equal to q, armament_strength is decremented by 1
-        If armament_strength is less than minimum_strength - 1, is_dead is set to true
-        If armament_strength is less than or equal to minimum_strength, is_active is set to false
+        If isActive is false or isDead is true, the function returns false
+        If the distance between the fighter and the target is greater than attackRange, the function returns false
+        If armamentStrength is greater than q, totalTargetsVanquished is incremented by 1, and the function returns true
+        If armamentStrength is less than or equal to q, armamentStrength is decremented by 1
+        If armamentStrength is less than minimumStrength - 1, isDead is set to true
+        If armamentStrength is less than or equal to minimumStrength, isActive is set to false
         The function returns false
          
         */
 
         public virtual bool Target(int x, int y, int q)
         {
-            if (!is_active || is_dead)
+            if (!isActive || isDead)
             {
                 return false;
             }
@@ -173,23 +173,23 @@ namespace FighterClass
             int distance = Math.Abs(row - x) + Math.Abs(column - y);
 
             // Check if the target is within the attack range
-            if (distance <= attack_range)
+            if (distance <= attackRange)
             {
                 // Check if the fighter's artillery is greater than the target's strength
-                if (armament_strength > q)
+                if (armamentStrength > q)
                 {
-                    total_targets_vanquished++;
+                    totalTargetsVanquished++;
                     return true;
                 }
 
-                if (armament_strength < q)
+                if (armamentStrength < q)
                 {
-                    armament_strength--;
+                    armamentStrength--;
                 }
             }
 
-            Check_Is_Dead();
-            Check_Is_Active();
+            CheckIsDead();
+            CheckIsActive();
 
             return false;
         }
@@ -197,25 +197,27 @@ namespace FighterClass
 
         public int Sum()
         {
-            return total_targets_vanquished;
+            return totalTargetsVanquished;
         }
 
-        private void Check_Is_Dead()
+        private void CheckIsDead()
         {
-            if (armament_strength < minimum_strength - 1)
+            if (armamentStrength < minimumStrength - 1)
             {
-                is_dead = true;
+                isDead = true;
             }
         }
 
-        private void Check_Is_Active()
+        private void CheckIsActive()
         {
-            if (armament_strength <= minimum_strength)
+            if (armamentStrength <= minimumStrength)
             {
-                is_active = false;
+                isActive = false;
             }
         }
         //------------------------------- For Unit Testing Purposes -------------//
+
+        /*
         public int Get_Row()
         {
             return row;
@@ -226,33 +228,35 @@ namespace FighterClass
             return column;
         }
 
-        public int Get_Attack_Range()
+        public int Get_attackRange()
         {
-            return attack_range;
+            return attackRange;
         }
 
         public bool Is_Active()
         {
-            return is_active;
+            return isActive;
         }
 
         public bool Is_Dead()
         {
-            return is_dead;
+            return isDead;
         }
 
-        public int Get_Armament_Strength()
+        public int Get_armamentStrength()
         {
-            return armament_strength;
+            return armamentStrength;
         }
+        */
+        
     }
 }
 
 /*
 ---------------------- Implementation Invariants ----------------
 
-is_dead can only be true when armament_strength < minimum_strength - 1
+isDead can only be true when armamentStrength < minimumStrength - 1
 
-is_active will be false when armament_strength <= minimum_strength
+isActive will be false when armamentStrength <= minimumStrength
 
  */
