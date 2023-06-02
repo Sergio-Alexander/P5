@@ -19,28 +19,6 @@ unit_combat must always be a valid instance of an object implementing the IComba
 
 namespace FighterClass
 {
-    //public interface ICombat_Unit
-    //{
-    //    int[] Combat_Unit();
-    //}
-
-    //public class Combat_HQ : ICombat_Unit
-    //{
-    //    private int[] main_artillery;
-
-    //    public Combat_HQ(int[] artillery)
-    //    {
-    //        main_artillery = artillery;
-    //    }
-
-    //    public int[] Combat_Unit()
-    //    {
-    //        return main_artillery;
-    //    }
-    //}
-
-
-
     public abstract class Fighter
     {
         protected int row;
@@ -50,13 +28,9 @@ namespace FighterClass
 
         protected int[] artillery;
 
-
-        //protected ICombat_Unit unit_combat;
-
         protected int minimumStrength;
         protected bool isActive;
         protected bool isDead;
-
 
         private int totalTargetsVanquished;
 
@@ -128,8 +102,6 @@ namespace FighterClass
             row = x;
             column = y;
         }
-
-
 
         /*
         Method Shift(int p)

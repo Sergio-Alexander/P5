@@ -1,4 +1,17 @@
 ﻿using System;
+
+/*
+ -------------------- Class Invariants -----------------
+
+guards is an instance of QuirkyGuard that handles the blocking functionality.
+
+omegaShield is a non-negative integer that accumulates with each block until it reaches armamentStrength.
+
+omegaShieldThreshold is a non-negative integer equal to half of armamentStrength.
+
+arti, armamentStrength, attackRange, fighterRow, and fighterCol are inherited from the Infantry class and follow the invariants defined in that class.
+ 
+ */
 namespace FighterClass
 {
 	public class InfantryQuirkyGuard:Infantry, IGuard
@@ -21,6 +34,17 @@ namespace FighterClass
             omegaShieldThreshold = armamentStrength / 2;
         }
 
+        /*
+        Preconditions:
+
+        Block: The input x must be a non-negative integer.
+
+        Postconditions:
+
+        Block: If omegaShield is less than armamentStrength, it increases omegaShield by 1, calls the Block method on guards with x, moves the infantry, and targets an object. If omegaShield is equal to or greater than armamentStrength, it resets omegaShield to 0 and returns.
+        AliveStatus: Returns the alive status of guards. 
+        */
+
         public virtual void Block(int x)
         {
             omegaShield++;
@@ -35,6 +59,16 @@ namespace FighterClass
             Target(row + 2, column + 2, armamentStrength - 2); // once blocked, it will target the object 
         }
 
+        /*
+        Preconditions:
+
+        AliveStatus: none
+
+        Postconditions:
+
+        Returns the status of the object, if it is alive or not 
+        */
+
         public bool AliveStatus()
         {
             return guards.AliveStatus();
@@ -43,4 +77,9 @@ namespace FighterClass
     
     }
 }
+/*
+---------------------- Implementation Invariants ----------------
+Block is a method that increases omegaShield with each call. If omegaShield reaches armamentStrength, it resets omegaShield to 0 and returns. Otherwise, it calls the Block method on guards, moves the infantry, and targets an object.
 
+AliveStatus is a method that returns the alive status of guards.
+ */

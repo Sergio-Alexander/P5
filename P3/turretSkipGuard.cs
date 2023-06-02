@@ -1,4 +1,13 @@
 ﻿using System;
+
+/*
+ -------------------- Class Invariants -----------------
+
+guards is an instance of SkipGuard and is never null.
+omegaShield is a non-negative integer.
+omegaShieldThreshold is a non-negative integer and is half of armamentStrength.
+ 
+ */
 namespace FighterClass
 {
 	public class TurretSkipGuard : Turret, IGuard
@@ -21,6 +30,17 @@ namespace FighterClass
             omegaShieldThreshold = armamentStrength / 2;
         }
 
+        /*
+        Preconditions:
+
+        x is a non-negative integer.
+        Postconditions:
+
+        If omegaShield is greater than or equal to armamentStrength, omegaShield is reset to 0 and the method returns without calling guards.Block(x).
+        If omegaShield is less than armamentStrength, guards.Block(x) is called and omegaShield is incremented by 1.
+        The guard targets a new position by calling Target(row + 2, column + 2, armamentStrength - 2).
+        */
+
         public void Block(int x)
         {
             omegaShield++;
@@ -33,6 +53,16 @@ namespace FighterClass
             guards.Block(x);
             Target(row + 2, column + 2, armamentStrength - 2); // once Blocked, it will target the object 
         }
+
+        /*
+        Preconditions:
+
+        None.
+        Postconditions:
+
+        Returns the alive status of the guard by calling guards.AliveStatus().
+        */
+
         public bool AliveStatus()
         {
             return guards.AliveStatus();
@@ -42,3 +72,9 @@ namespace FighterClass
     }
 }
 
+/*
+---------------------- Implementation Invariants ----------------
+guards is used to handle the blocking of attacks.
+omegaShield is used to track the number of times the guard has blocked an attack.
+omegaShieldThreshold is the limit that omegaShield needs to reach before it can block an attack without damaging the durability of the shield.
+ */

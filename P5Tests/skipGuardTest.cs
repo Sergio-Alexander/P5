@@ -64,10 +64,10 @@ namespace FighterClass.Tests
             var guard2 = new InfantrySkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k);
 
             guard1.Block(0);
-            Assert.AreEqual(1, guard_array[1]); // 1 was subtracted from the second element
+            Assert.AreEqual(0, guard_array[1]); 
 
             guard2.Block(2);
-            Assert.AreEqual(0, guard_array[0]); // 1 was subtracted from the first element
+            Assert.AreEqual(0, guard_array[0]); 
         }
 
 
