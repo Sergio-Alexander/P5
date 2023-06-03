@@ -16,7 +16,8 @@ health must always be a non-negative integer.
 
 
 Notes: Here the class Guard is being being inherited by IGuard. The Guard class is essentially the base for all the guard classes, this class includes the base Block, and Construction. 
- 
+
+Guard is also an abstract class
  */
 
 namespace FighterClass

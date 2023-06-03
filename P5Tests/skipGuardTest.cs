@@ -22,13 +22,19 @@ namespace FighterClass.Tests
             int[] guard_array = { 1, 2, 3 };
             int k = 1;
 
+            var skipG = new SkipGuard(guard_array, k);
+
             var guardSkipInfantry = new InfantrySkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k);
             var guardSkipTurret = new TurretSkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k);
-      
+
+            bool res = skipG.AliveStatus();
+
             bool result1 = guardSkipInfantry.AliveStatus();
             bool result2 = guardSkipTurret.AliveStatus();
-        
 
+            Assert.IsTrue(res);
+        
+            
             Assert.IsTrue(result1);
             Assert.IsTrue(result2);
        
@@ -43,6 +49,8 @@ namespace FighterClass.Tests
             int fighterCol = 5;
             int[] guard_array = { 1, 2, 3 };
             int k = -3;
+
+            Assert.ThrowsException<ArgumentException>(() => new SkipGuard(guard_array, k));
 
             Assert.ThrowsException<ArgumentException>(() => new InfantrySkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k));
             Assert.ThrowsException<ArgumentException>(() => new TurretSkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k));
@@ -62,6 +70,12 @@ namespace FighterClass.Tests
 
             var guard1 = new TurretSkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k);
             var guard2 = new InfantrySkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k);
+
+            var guard3 = new SkipGuard(guard_array, k);
+
+
+            guard3.Block(0);
+            Assert.AreEqual(1, guard_array[0]);
 
             guard1.Block(0);
             Assert.AreEqual(0, guard_array[1]); 
@@ -84,10 +98,15 @@ namespace FighterClass.Tests
             int[] guard_array = { 1, 2, 3 };
             int k = 1;
 
+            var guard1 = new SkipGuard(guard_array, k);
+
             var guard = new TurretSkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guard_array, k);
 
             bool result = guard.AliveStatus();
 
+            bool result1 = guard1.AliveStatus();
+
+            Assert.IsTrue(result1);
             Assert.IsTrue(result);
         }
 

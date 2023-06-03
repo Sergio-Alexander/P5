@@ -51,7 +51,7 @@ namespace FighterClass
                 return;
             }
             guards.Block(x);
-            Target(row + 2, column + 2, armamentStrength - 2); // once Blocked, it will target the object 
+            Target(row + 2, column + 2, armamentStrength - 2); // once Blocked, it will target the object (counter attack)
         }
 
         /*

@@ -55,7 +55,7 @@ namespace FighterClass
                 return;
             }
             guards.Block(x);
-            Move(row + 1, column + 1);
+            Move(row + 1, column + 1); // if this guard is blocking, it will move
             Target(row + 2, column + 2, armamentStrength - 2); // once blocked, it will target the object 
         }
 

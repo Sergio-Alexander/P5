@@ -8,8 +8,44 @@ Assignment: P5
 
 This program simulates a battle scenario between different types of guards, specifically Infantry and Turret guards.
 The guards are represented as objects of classes that implement the IGuard interface. 
-Each guard has properties such as armamentStrength, attackRange, and aliveStatus, and methods such as Move(), Target(), and Block()
+Each guard has properties such as armamentStrength, attackRange, and aliveStatus, and methods such as Move(), Target(), and Block() [IF THEY ARE A CROSS-PRODUCT]
+A guard can also be SkipGuard or QuirkyGuard without the properties of a Fighter
 
+The P5 driver must test the use of the ‘multiply-inherited’ types together.
+Thus, it will differ from the unit tests which test each type separately.
+Additionally:
+1) Use at least one heterogeneous collection for testing functionality
+2) Instantiate a variety of objects
+3) Trigger a variety of mode changes
+
+
+- I am testing all the miltiply inherited types together
+- I am using a heterogeneous collection <LIST> to test the functionality
+- I am instantiating a variety of objects {skipGuard, quirkyGuard, turretSkipGuard, turretQuirkyGuard, infantrySkipGuard, and infantryQuirkyGuard}
+- Within the Guard class, the mode change will happen automatically.
+
+Upgrades and fixes from P3:
+Classes:
+- Fixed classes so that each implementation invariant contains essential details
+- Did not use random generator Random() in the class
+- Error Checking implemented in the constructor
+
+Fighter:
+- Move implemented
+- Made many functions private
+
+Turret:
+- Made max-failed-request unique to each object
+
+Infantry:
+- Reconfigured reset
+
+P5 Driver:
+- Functional decomposition has been added
+- Made sure every public function has been tested
+
+P5 Unit Test:
+- Unit Tests have been decomposed into various units
 
 
 ASSUMPTIONS:
@@ -30,6 +66,7 @@ The battle continues until only one guard is left standing.
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace FighterClass
 {
@@ -44,7 +81,7 @@ namespace FighterClass
             AddGuards(guards);
 
             // Loop through the list and call methods on each object
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
                 Console.WriteLine($"Round {i + 1}:");
                 TestGuards(guards);
@@ -72,6 +109,9 @@ namespace FighterClass
                 }
                 int k = rand.Next(1, 10);
 
+                guards.Add(new SkipGuard(guardArray, k));
+                guards.Add(new QuirkyGuard(guardArray));
+
                 guards.Add(new TurretSkipGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guardArray, k));
                 guards.Add(new TurretQuirkyGuard(arti, armamentStrength, attackRange, fighterRow, fighterCol, guardArray));
 
@@ -81,6 +121,9 @@ namespace FighterClass
         }
         static void TestGuards(List<IGuard> guards)
         {
+            // Store the initial number of guards
+            int initialNumGuards = guards.Count;
+
             // If all guards are dead, return from the method
             if (guards.Count <= 1)
             {
@@ -89,57 +132,65 @@ namespace FighterClass
             }
             Random rand = new Random();
 
-            for (int i = 0; i < guards.Count; i++)
+            for (int round = 0; round < 20; round++)
             {
-                // Randomly select a guard to block the attack
-                int blockingGuardIndex = rand.Next(guards.Count);
-
-                // Randomly select a guard to attack
-                int attackingGuardIndex = rand.Next(guards.Count);
-
-                // Ensure the blocking guard is not the same as the attacking guard
-                while (blockingGuardIndex == attackingGuardIndex)
+               
+                for (int i = 0; i < guards.Count; i++)
                 {
-                    attackingGuardIndex = rand.Next(guards.Count);
+                    // Randomly select a guard to block the attack
+                    int blockingGuardIndex = rand.Next(guards.Count);
+
+                    // Randomly select a guard to attack
+                    int attackingGuardIndex = rand.Next(guards.Count);
+
+                    // Ensure the blocking guard is not the same as the attacking guard
+                    while (blockingGuardIndex == attackingGuardIndex)
+                    {
+                        attackingGuardIndex = rand.Next(guards.Count);
+                    }
+
+                    // If the attacking guard is not alive, skip the attack
+                    if (!guards[attackingGuardIndex].AliveStatus() || !guards[blockingGuardIndex].AliveStatus())
+                    {
+                        continue;
+                    }
+
+                    // Determine the strength of the attack
+                    int attackIndex = rand.Next(1, 10);
+
+                    // Generate random coordinates for the Move() and Target() methods
+                    int x = rand.Next(1, 5);
+                    int y = rand.Next(1, 5);
+                    int z = rand.Next(1, 5);
+
+                    // Test the Move() and Target() methods if the guard is an Infantry
+                    if (guards[i] is Infantry infantry)
+                    {
+                        infantry.Move(x, y);
+                        infantry.Target(x, y, z);
+                    }
+
+                    // Test the Target() method if the guard is a Turret
+                    if (guards[i] is Turret turret)
+                    {
+                        turret.Target(x, y, z);
+                    }
+
+                    // If the guard is being targeted, it blocks the attack
+                    if (i == attackingGuardIndex)
+                    {
+                        Console.WriteLine($"Guard{blockingGuardIndex + 1} is blocking attack from Guard{attackingGuardIndex + 1}.");
+                        guards[blockingGuardIndex].Block(attackIndex);
+                    }
                 }
-
-                // If the attacking guard is not alive, skip the attack
-                if (!guards[attackingGuardIndex].AliveStatus() || !guards[blockingGuardIndex].AliveStatus())
-                {
-                    continue;
-                }
-
-                // Determine the strength of the attack
-                int attackIndex = rand.Next(1, 10);
-
-                // Generate random coordinates for the Move() and Target() methods
-                int x = rand.Next(1, 5);
-                int y = rand.Next(1, 5);
-                int z = rand.Next(1, 5);
-
-                // Test the Move() and Target() methods if the guard is an Infantry
-                if (guards[i] is Infantry infantry)
-                {
-                    infantry.Move(x, y);
-                    infantry.Target(x, y, z);
-                }
-
-                // Test the Target() method if the guard is a Turret
-                if (guards[i] is Turret turret)
-                {
-                    turret.Target(x, y, z);
-                }
-
-                // If the guard is being targeted, it blocks the attack
-                if (i == attackingGuardIndex)
-                {
-                    Console.WriteLine($"Guard{blockingGuardIndex + 1} is blocking attack from Guard{attackingGuardIndex + 1}.");
-                    guards[blockingGuardIndex].Block(attackIndex);
-                }
+                // Remove dead guards
+                guards.RemoveAll(guard => !guard.AliveStatus());
             }
 
-            // Remove dead guards
-            guards.RemoveAll(guard => !guard.AliveStatus());
+            int aliveGuards = guards.Count;
+            int deadGuards = initialNumGuards - aliveGuards;
+            Console.WriteLine($"After this round, there are {aliveGuards} guards alive and {deadGuards} guards dead.");
         }
+
     }
 }
